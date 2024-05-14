@@ -10,7 +10,10 @@ class Node:
 
 class SkipListIterator:
     def __init__(self, node):
-        self.node = node
+        if not node.item:
+            self.node = node.right
+        else:
+            self.node = node
 
     def __iter__(self):
         return self
@@ -20,8 +23,7 @@ class SkipListIterator:
             node = self.node
             self.node = self.node.right
             return node.item
-        else:
-            raise StopIteration
+        raise StopIteration
 
 
 class SkipList:
@@ -59,7 +61,7 @@ class SkipList:
         return self.get_node_aux(index)
 
     def __iter__(self):
-        x = self.get_node(0)
+        x = self.get_node_aux(-1)
         return SkipListIterator(x)
 
     def __getitem__(self, index):
@@ -137,4 +139,4 @@ class SkipList:
         self.size += 1
 
     def append(self, item):
-        self.insert(item, len(self))
+        self.insert(len(self), item)
